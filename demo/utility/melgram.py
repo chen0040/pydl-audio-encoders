@@ -1,6 +1,8 @@
 import os
 import matplotlib
 
+from pydl_audio_encoders.library.utility.audio_utils import compute_melgram
+
 matplotlib.use('Agg')  # No pictures displayed
 import pylab
 from matplotlib import pyplot as plt
@@ -45,10 +47,15 @@ def melgram_v2(audio_file_path):
 
     # Make the figure layout compact
     plt.tight_layout()
+    plt.show()
 
 
 def main():
-    melgram_v2('../data/audio_samples/example.mp3')
+    audio_file_path = '../data/audio_samples/example.mp3'
+    # melgram_v1(audio_file_path, '../data/output/example_mp3.png')
+    # melgram_v2(audio_file_path)
+    arr = compute_melgram(audio_file_path)
+    print('melgram: ', arr.shape)
 
 
 if __name__ == '__main__':
