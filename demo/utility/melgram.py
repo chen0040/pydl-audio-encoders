@@ -28,7 +28,7 @@ def melgram_v2(audio_file_path):
     S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
 
     # Convert to log scale (dB). We'll use the peak power as reference.
-    log_S = librosa.core.amplitude_to_db(S, ref_power=np.max)
+    log_S = librosa.core.amplitude_to_db(S, ref=np.max)
 
     # Make a new figure
     plt.figure(figsize=(12, 4))
@@ -48,7 +48,7 @@ def melgram_v2(audio_file_path):
 
 
 def main():
-    melgram_v2()
+    melgram_v2('../data/audio_samples/example.mp3')
 
 
 if __name__ == '__main__':
