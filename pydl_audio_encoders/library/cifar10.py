@@ -17,6 +17,10 @@ class Cifar10AudioEncoder(object):
             working_directory = os.path.join(str(Path.home()), Cifar10AudioEncoder.model_name)
 
         self.working_directory = working_directory
+
+        if not os.path.exists(self.working_directory):
+            os.mkdir(self.working_directory) 
+
         self.model_file_path = os.path.join(self.working_directory, 'cifar10.pb')
 
         download_cifar10_model_if_not_found(self.model_file_path)

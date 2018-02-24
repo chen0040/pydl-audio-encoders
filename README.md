@@ -1,6 +1,20 @@
 # pydl-audio-encoders
 Audio encoders that convert audios into numpy arrays for machine learning
 
+The implementation of the audio is in the [pydl_audio_encoders/library](pydl_audio_encoders/library)
+
+# Usage
+
+### Audio Classifier
+
+The [sample codes](demo/audio_classifier.py) shows how to use the encoder to predict the genre
+of a song
+
+### Audio Encoder
+
+
+
+
 # Note
 
 ### audioread.NoBackend
