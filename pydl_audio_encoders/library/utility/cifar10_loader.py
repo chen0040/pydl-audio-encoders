@@ -4,9 +4,7 @@ import os
 from pydl_audio_encoders.library.utility.download_utils import reporthook
 
 
-def download_cifar10_model_if_not_found(data_dir_path):
-    file_name = 'cifar10.pb'
-    flag_file = os.path.join(data_dir_path, file_name)
+def download_cifar10_model_if_not_found(flag_file):
     if os.path.exists(flag_file):
         return
 
