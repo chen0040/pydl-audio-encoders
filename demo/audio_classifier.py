@@ -1,9 +1,5 @@
 from random import shuffle
-import tensorflow as tf
-import numpy as np
-
-from keras_audio.library.utility.audio_utils import compute_melgram
-from keras_audio.library.utility.gtzan_loader import download_gtzan_genres_if_not_found, gtzan_labels
+from pydl_audio_encoders.library.utility.gtzan_loader import download_gtzan_genres_if_not_found, gtzan_labels
 
 from pydl_audio_encoders.library.cifar10 import Cifar10AudioEncoder
 
