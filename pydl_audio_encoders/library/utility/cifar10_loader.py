@@ -1,0 +1,19 @@
+import urllib.request
+import os
+
+from pydl_audio_encoders.library.utility.download_utils import reporthook
+
+
+def download_cifar10_model_if_not_found(data_dir_path):
+    file_name = 'cifar10.pb'
+    flag_file = os.path.join(data_dir_path, file_name)
+    if os.path.exists(flag_file):
+        return
+
+    if not os.path.exists(flag_file):
+        url_link = 'https://www.dropbox.com/s/tr6f98vfwyefvtr/cifar10.pb?dl=1'
+        print('pb model file does not exist, downloading from internet')
+        urllib.request.urlretrieve(url=url_link, filename=flag_file,
+                                   reporthook=reporthook)
+
+
