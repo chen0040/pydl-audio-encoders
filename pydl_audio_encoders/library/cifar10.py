@@ -19,7 +19,7 @@ class Cifar10AudioEncoder(object):
         self.working_directory = working_directory
 
         if not os.path.exists(self.working_directory):
-            os.mkdir(self.working_directory) 
+            os.mkdir(self.working_directory)
 
         self.model_file_path = os.path.join(self.working_directory, 'cifar10.pb')
 
@@ -36,7 +36,6 @@ class Cifar10AudioEncoder(object):
             print(n.name)
 
     def predict(self, audio_path):
-
         with tf.Session() as sess:
             predict_op = sess.graph.get_tensor_by_name('output_node0:0')
             mg = compute_melgram(audio_path)
@@ -48,8 +47,7 @@ class Cifar10AudioEncoder(object):
 
     def predict_class(self, audio_path):
         predicted = self.predict(audio_path)
-
-        return np.argmax(predicted)[0]
+        return np.argmax(predicted)
 
     def predict_class_label(self, audio_path):
         predicted_label_idx = self.predict_class(audio_path)
