@@ -8,12 +8,120 @@ The implementation of the audio is in the [pydl_audio_encoders/library](pydl_aud
 ### Audio Classifier
 
 The [sample codes](demo/audio_classifier.py) shows how to use the encoder to predict the genre
-of a song
+of a song:
+
+```python
+from random import shuffle
+from pydl_audio_encoders.library.utility.gtzan_loader import download_gtzan_genres_if_not_found, gtzan_labels
+
+from pydl_audio_encoders.library.cifar10 import Cifar10AudioEncoder
+
+
+def load_audio_path_label_pairs(max_allowed_pairs=None):
+    download_gtzan_genres_if_not_found('./very_large_data/gtzan')
+    audio_paths = []
+    with open('./data/lists/test_songs_gtzan_list.txt', 'rt') as file:
+        for line in file:
+            audio_path = './very_large_data/' + line.strip()
+            audio_paths.append(audio_path)
+    pairs = []
+    with open('./data/lists/test_gt_gtzan_list.txt', 'rt') as file:
+        for line in file:
+            label = int(line)
+            if max_allowed_pairs is None or len(pairs) < max_allowed_pairs:
+                pairs.append((audio_paths[len(pairs)], label))
+            else:
+                break
+    return pairs
+
+
+def main():
+    audio_path_label_pairs = load_audio_path_label_pairs()
+    shuffle(audio_path_label_pairs)
+    print('loaded: ', len(audio_path_label_pairs))
+
+    encoder = Cifar10AudioEncoder()
+
+    for i in range(0, 20):
+        audio_path, actual_label_id = audio_path_label_pairs[i]
+        predicted_label_id = encoder.predict_class(audio_path)
+        actual_label = gtzan_labels[actual_label_id]
+        predicted_label = gtzan_labels[predicted_label_id]
+
+        print('Audio: ', audio_path)
+        print('Predicted: ', predicted_label, 'Actual: ', actual_label)
+
+
+if __name__ == '__main__':
+    main()
+```
 
 ### Audio Encoder
 
+The [sample codes](demo/audio_encoder.py) shows how to use the encoder to encode varied-length
+of audio file into fixed length numpy array:
+
+```python
+from random import shuffle
+from pydl_audio_encoders.library.utility.gtzan_loader import download_gtzan_genres_if_not_found, gtzan_labels
+
+from pydl_audio_encoders.library.cifar10 import Cifar10AudioEncoder
 
 
+def load_audio_path_label_pairs(max_allowed_pairs=None):
+    download_gtzan_genres_if_not_found('./very_large_data/gtzan')
+    audio_paths = []
+    with open('./data/lists/test_songs_gtzan_list.txt', 'rt') as file:
+        for line in file:
+            audio_path = './very_large_data/' + line.strip()
+            if max_allowed_pairs is None or len(audio_paths) < max_allowed_pairs:
+                audio_paths.append(audio_path)
+    pairs = []
+    with open('./data/lists/test_gt_gtzan_list.txt', 'rt') as file:
+        for line in file:
+            label = int(line)
+            if max_allowed_pairs is None or len(pairs) < max_allowed_pairs:
+                pairs.append((audio_paths[len(pairs)], label))
+            else:
+                break
+    return pairs
+
+
+def main():
+    audio_path_label_pairs = load_audio_path_label_pairs(1)
+
+    encoder = Cifar10AudioEncoder()
+
+    audio_path, actual_label_id = audio_path_label_pairs[0]
+    encoded_audio = encoder.encode(audio_path)
+
+    print(encoded_audio)
+
+
+if __name__ == '__main__':
+    main()
+
+```
+
+The above code encode a varied-length audio file to a numpy array of shape(512, )
+
+In some cases, a low dimension encoding is desired, to do this change the following line
+
+```python
+encoder = ...
+audio_path = ...
+encoder.encode(audio_path)
+```
+
+to the following:
+
+```python
+encoder = ...
+audio_path = ...
+encoder.encode(audio_path, high_dimension=False)
+```
+
+This will encode a varied-length audio file to a numpy array of shape (10, )
 
 # Note
 

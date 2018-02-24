@@ -10,7 +10,8 @@ def load_audio_path_label_pairs(max_allowed_pairs=None):
     with open('./data/lists/test_songs_gtzan_list.txt', 'rt') as file:
         for line in file:
             audio_path = './very_large_data/' + line.strip()
-            audio_paths.append(audio_path)
+            if max_allowed_pairs is None or len(audio_paths) < max_allowed_pairs:
+                audio_paths.append(audio_path)
     pairs = []
     with open('./data/lists/test_gt_gtzan_list.txt', 'rt') as file:
         for line in file:
@@ -23,21 +24,14 @@ def load_audio_path_label_pairs(max_allowed_pairs=None):
 
 
 def main():
-    audio_path_label_pairs = load_audio_path_label_pairs()
-    shuffle(audio_path_label_pairs)
-    print('loaded: ', len(audio_path_label_pairs))
+    audio_path_label_pairs = load_audio_path_label_pairs(1)
 
     encoder = Cifar10AudioEncoder()
-    encoder.print_graph_nodes()
 
-    for i in range(0, 20):
-        audio_path, actual_label_id = audio_path_label_pairs[i]
-        predicted_label_id = encoder.predict_class(audio_path)
-        actual_label = gtzan_labels[actual_label_id]
-        predicted_label = gtzan_labels[predicted_label_id]
+    audio_path, actual_label_id = audio_path_label_pairs[0]
+    encoded_audio = encoder.encode(audio_path)
 
-        print('Audio: ', audio_path)
-        print('Predicted: ', predicted_label, 'Actual: ', actual_label)
+    print(encoded_audio)
 
 
 if __name__ == '__main__':

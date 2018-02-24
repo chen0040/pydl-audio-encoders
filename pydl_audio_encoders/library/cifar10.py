@@ -35,6 +35,19 @@ class Cifar10AudioEncoder(object):
         for n in self.graph_def.node:
             print(n.name)
 
+    def encode(self, audio_path, high_dimension=True):
+        with tf.Session() as sess:
+            output_name = 'dense_2/BiasAdd:0'
+            if high_dimension:
+                output_name = 'dense_1/BiasAdd:0'
+            predict_op = sess.graph.get_tensor_by_name(output_name)
+            mg = compute_melgram(audio_path)
+            mg = np.expand_dims(mg, axis=0)
+
+            predicted = sess.run(predict_op, feed_dict={"conv2d_1_input:0": mg})
+
+            return predicted[0]
+
     def predict(self, audio_path):
         with tf.Session() as sess:
             predict_op = sess.graph.get_tensor_by_name('output_node0:0')
