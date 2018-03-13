@@ -29,10 +29,10 @@ def load_audio_path_label_pairs(max_allowed_pairs=None):
 
 
 def main():
-    audio_path_label_pairs = load_audio_path_label_pairs(1)
-
     current_dir = os.path.dirname(__file__)
     sys.path.append(os.path.join(current_dir, '..'))
+
+    audio_path_label_pairs = load_audio_path_label_pairs(1)
 
     from pydl_audio_encoders.library.cifar10 import Cifar10AudioEncoder
     encoder = Cifar10AudioEncoder()
